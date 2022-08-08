@@ -35,13 +35,14 @@ def get_num_of_tokens_per_profession(professions,translations_dict,tokenizer, ta
         tokens_per_profession[profession] = {}
         male_count,male_tokens,female_count,female_tokens=0,0,0,0
         m,f  =list(translations_dict[profession]['Male']),list(translations_dict[profession]['Female'])
-        for mp in m:
-            male_count+=1
-            male_tokens+=len(tokenizer.tokenize(mp))
-        tokens_per_profession[profession]['Male'] = male_tokens/male_count
-        for fp in f:
-            female_count+=1
-            female_tokens+=len(tokenizer.tokenize(fp))
+        with tokenizer.as_target_tokenizer():
+            for mp in m:
+                male_count+=1
+                male_tokens+=len(tokenizer(mp)['input_ids'])
+            tokens_per_profession[profession]['Male'] = male_tokens/male_count
+            for fp in f:
+                female_count+=1
+                female_tokens+=len(tokenizer(fp)['input_ids'])
         tokens_per_profession[profession]['Female'] = female_tokens/female_count
     with open(target_file,'w+') as f:
         f.write(str(tokens_per_profession))
@@ -51,12 +52,14 @@ def get_num_of_tokens_per_gender(professions,translations_dict,tokenizer,target_
     male_count,male_tokens,female_count,female_tokens=0,0,0,0
     for profession in professions:
         m,f  =list(translations_dict[profession]['Male']),list(translations_dict[profession]['Female'])
-        for mp in m:
-            male_count+=1
-            male_tokens+=len(tokenizer.tokenize(mp))
-        for fp in f:
-            female_count+=1
-            female_tokens+=len(tokenizer.tokenize(fp))
+        with tokenizer.as_target_tokenizer():
+
+            for mp in m:
+                male_count+=1
+                male_tokens+=len(tokenizer(mp)['input_ids'])
+            for fp in f:
+                female_count+=1
+                female_tokens+=len(tokenizer(fp)['input_ids'])
     with open(target_file,'w+') as f:
         f.write("male: "+str(male_tokens/male_count)+"\n")
         f.write("female: "+str(female_tokens/female_count)+"\n")
