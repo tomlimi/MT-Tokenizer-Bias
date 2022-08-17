@@ -27,16 +27,24 @@ def get_lexical_translations(directory, src_lang, tgt_lang, translator='gold'):
     with open(tok_file, 'r') as in_toks, open(aligned_file, 'r') as in_align:
         for src_tgt_toks, alignments in zip(in_toks, in_align):
 
-            lt_line = defaultdict(list)
+            lt_line = []
 
             src_toks, tgt_toks = src_tgt_toks.split(' ||| ')
 
             src_toks = src_toks.strip().split(' ')
             tgt_toks = tgt_toks.strip().split(' ')
+            src_tgt_map = dict()
 
             for alignment in alignments.split(' '):
+                
                 src_algn, tgt_algn = alignment.split('-')
-                lt_line[src_toks[int(src_algn)]] = tgt_toks[int(tgt_algn)]
+                src_tgt_map[int(src_algn)] = int(tgt_algn)
+                
+            for src_idx, src_tok in enumerate(src_toks):
+                if src_idx in src_tgt_map:
+                    lt_line.append((src_tok, tgt_toks[src_tgt_map[src_idx]]))
+                else:
+                    lt_line.append((src_tok, None))
 
             lexical_translations.append(lt_line)
 
