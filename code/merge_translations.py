@@ -134,8 +134,8 @@ if __name__ == '__main__':
     print("tokens per gender he")
     he_male_average_tokens, he_female_average_tokens, he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens =\
         get_num_of_tokens_per_gender(professions, he_translations, tokenizer_he, "he_tokens_per_gender.txt")
-    graphs_3_and_4(he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens, "Hebrew num of tokens per Gender")
+    graphs_3_and_4(he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens, "Hebrew num of tokens per Gender", "Male", "Female")
     print("tokens per gender de")
     de_male_average_tokens, de_female_average_tokens, de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens =\
         get_num_of_tokens_per_gender(professions, de_translations, tokenizer_de, "de_tokens_per_gender.txt")
-    graphs_3_and_4(de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens, "German num of tokens per Gender")
+    graphs_3_and_4(de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens, "German num of tokens per Gender", "Male", "Female")
