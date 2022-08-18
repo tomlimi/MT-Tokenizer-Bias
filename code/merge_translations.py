@@ -87,6 +87,37 @@ def get_num_of_tokens_per_gender(professions, translations_dict, tokenizer, targ
     max_tokens = max(max(male_num_of_tokens_map.keys()),max(female_num_of_tokens_map.keys()))
     return male_tokens / male_count, female_tokens / female_count, male_num_of_tokens_map, female_num_of_tokens_map, max_tokens
 
+def get_num_of_tokens_per_stereotype(male_stereotype,female_stereotype,translations_dict, tokenizer, target_file):
+    male_stereotype_count, male_stereotype_tokens, female_stereotype_count, female_stereotype_tokens = 0, 0, 0, 0
+    male_stereotype_num_of_tokens_map, female_stereotype_num_of_tokens_map = {}, {}
+    with tokenizer.as_target_tokenizer():
+        for mp in male_stereotype:
+            professions = list(translations_dict[mp]['Male'])+list(translations_dict[mp]['Female'])
+            male_stereotype_count += len(professions)
+            for p in professions:
+                num_of_tokens = len(tokenizer(p)['input_ids'][:-1])
+                male_stereotype_tokens += num_of_tokens
+                if num_of_tokens not in male_stereotype_num_of_tokens_map:
+                    male_stereotype_num_of_tokens_map[num_of_tokens] = 1
+                else:
+                    male_stereotype_num_of_tokens_map[num_of_tokens] += 1
+
+        for fp in female_stereotype:
+            professions = list(translations_dict[fp]['Male'])+list(translations_dict[fp]['Female'])
+            female_stereotype_count += len(professions)
+            for p in professions:
+                num_of_tokens = len(tokenizer(p)['input_ids'][:-1])
+                female_stereotype_tokens += num_of_tokens
+                if num_of_tokens not in female_stereotype_num_of_tokens_map:
+                    female_stereotype_num_of_tokens_map[num_of_tokens] = 1
+                else:
+                    female_stereotype_num_of_tokens_map[num_of_tokens] += 1
+    with open(target_file, 'w+') as f:
+        f.write("male stereotype: " + str(male_stereotype_tokens / male_stereotype_count) + "\n")
+        f.write("female stereotype: " + str(female_stereotype_tokens / female_stereotype_count) + "\n")
+    max_tokens = max(max(male_stereotype_num_of_tokens_map.keys()),max(female_stereotype_num_of_tokens_map.keys()))
+    return male_stereotype_tokens / male_stereotype_count, female_stereotype_tokens / female_stereotype_count,\
+           male_stereotype_num_of_tokens_map, female_stereotype_num_of_tokens_map, max_tokens
 
 def graphs_3_and_4(group1_num_of_tokens_map, group2_num_of_tokens_map, max_tokens, title, group1_name,group2_name):
     for i in range(1,max_tokens+1):
@@ -132,10 +163,32 @@ if __name__ == '__main__':
     print(get_num_of_tokens_per_profession(professions, de_translations, tokenizer_de, "de_tokens_per_profession.txt"))
 
     print("tokens per gender he")
-    he_male_average_tokens, he_female_average_tokens, he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens =\
+    he_male_average_tokens, he_female_average_tokens, he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens = \
         get_num_of_tokens_per_gender(professions, he_translations, tokenizer_he, "he_tokens_per_gender.txt")
     graphs_3_and_4(he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens, "Hebrew num of tokens per Gender", "Male", "Female")
     print("tokens per gender de")
-    de_male_average_tokens, de_female_average_tokens, de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens =\
+    de_male_average_tokens, de_female_average_tokens, de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens = \
         get_num_of_tokens_per_gender(professions, de_translations, tokenizer_de, "de_tokens_per_gender.txt")
     graphs_3_and_4(de_male_num_of_tokens_map, de_female_num_of_tokens_map, de_max_tokens, "German num of tokens per Gender", "Male", "Female")
+
+
+    # stereotype
+
+    with open("/cs/usr/bareluz/gabi_labs/bar_tomasz/MT-Tokenizer-Bias/data/male_stereotype","r") as f:
+        male_stereotype = f.readlines()
+        male_stereotype = [i.strip() for i in male_stereotype]
+    with open("/cs/usr/bareluz/gabi_labs/bar_tomasz/MT-Tokenizer-Bias/data/female_stereotype","r") as f:
+        female_stereotype = f.readlines()
+        female_stereotype = [i.strip() for i in female_stereotype]
+
+    print("tokens per stereotype he")
+    he_male_stereotype_avg_tokens, he_female_stereotype_avg_tokens, \
+    he_male_stereotype_num_of_tokens_map, he_female_stereotype_num_of_tokens_map, he_max_tokens = \
+        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, he_translations, tokenizer_he, "he_tokens_per_stereotype.txt")
+    graphs_3_and_4(he_male_stereotype_num_of_tokens_map, he_female_stereotype_num_of_tokens_map, he_max_tokens, "Hebrew num of tokens per stereotype", "Male stereotype", "Female stereotype")
+
+    print("tokens per stereotype de")
+    de_male_stereotype_avg_tokens, de_female_stereotype_avg_tokens, \
+    de_male_stereotype_num_of_tokens_map, de_female_stereotype_num_of_tokens_map, de_max_tokens = \
+        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, de_translations, tokenizer_de, "de_tokens_per_stereotype.txt")
+    graphs_3_and_4(de_male_stereotype_num_of_tokens_map, de_female_stereotype_num_of_tokens_map, de_max_tokens, "German num of tokens per stereotype", "Male stereotype", "Female stereotype")
