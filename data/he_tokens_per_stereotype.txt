@@ -1,0 +1,2 @@
+male stereotype: 1.511111111111111
+female stereotype: 1.7894736842105263
