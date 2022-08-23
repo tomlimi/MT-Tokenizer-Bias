@@ -1,0 +1,1 @@
+{"acc": 52.2, "f1_male": 60.6, "f1_female": 48.4, "unk_male": 116, "unk_female": 121, "unk_neutral": 5}
