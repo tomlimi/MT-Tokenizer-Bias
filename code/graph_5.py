@@ -1,6 +1,6 @@
 import json
 import matplotlib.pyplot as plt
-
+import numpy as np
 def graph_5(recall_file,tokens_file,lang):
     with open(recall_file,"r") as f:
         recalls_str = (f.readlines())[-1]
@@ -22,12 +22,17 @@ def graph_5(recall_file,tokens_file,lang):
     for p in delta_t_dict.keys():
         delta_g_dict[p] = recalls_dict[p]['male_recall']-recalls_dict[p]['female_recall']
 
-    x = delta_t_dict.values()
-    y = delta_g_dict.values()
+    x = list(delta_t_dict.values())
+    y = list(delta_g_dict.values())
     plt.scatter(x, y, marker='o')
     plt.xlabel("Delta T")
     plt.ylabel("Delta G")
     plt.title("Delta G per Delta T for each profession "+lang)
+
+    z = np.polyfit(x, y, 1)
+    p = np.poly1d(z)
+    plt.plot(x, p(x), "r--")
+
     plt.show()
 
 if __name__ == '__main__':

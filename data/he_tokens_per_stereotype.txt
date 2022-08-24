@@ -1,2 +1,2 @@
-male stereotype: 1.511111111111111
-female stereotype: 1.7894736842105263
+stereotype: 2.0308563313236427
+anti stereotype: 1.9960732110028956
