@@ -24,12 +24,29 @@ def evaluate_lexical_translation(dir, src_lang, tgt_lang, translator, lexical_di
     for sent_idx in range(len(mt_trans)):
         for (mt_src, mt_tgt), (gold_src, gold_tgt) in zip(mt_trans[str(sent_idx)], gold_trans[str(sent_idx)]):
             assert mt_src == gold_src
-            if gold_tgt:
-                if gold_tgt.lower() in lexical_dict[gold_src.lower()]:
-                    results[gold_tgt]['count'] += 1
-                    if gold_tgt == mt_tgt:
-                        results[gold_tgt]['correct'] += 1
-    
+            
+            if not lexical_dict.in_src(gold_src.lower()):
+                continue
+            else:
+                for lex_tgt in lexical_dict[gold_src.lower()]:
+                    results[lex_tgt]['count'] += 1
+                
+            if mt_tgt and lexical_dict.in_tgt(mt_tgt) and mt_tgt in lexical_dict[gold_src.lower()]:
+                results[mt_tgt]['correct_mt'] += 1
+            elif mt_tgt and not lexical_dict.in_tgt(mt_tgt):
+                pass
+            else:
+                for lex_tgt in lexical_dict[gold_src.lower()]:
+                    results[lex_tgt]['miss_mt'] += 1
+
+            if gold_tgt and lexical_dict.in_tgt(gold_tgt) and gold_tgt in lexical_dict[gold_src.lower()]:
+                results[gold_tgt]['correct_gold'] += 1
+            elif gold_tgt and not lexical_dict.in_tgt(gold_tgt):
+                pass
+            else:
+                for lex_tgt in lexical_dict[gold_src.lower()]:
+                    results[lex_tgt]['miss_gold'] += 1
+                    
     return results
 
 
