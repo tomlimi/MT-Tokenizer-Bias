@@ -1,0 +1,2 @@
+tatoeba/*.txt filter=lfs diff=lfs merge=lfs -text
+muse-dic/*.txt filter=lfs diff=lfs merge=lfs -text
