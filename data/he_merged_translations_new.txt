@@ -1,0 +1,40 @@
+counselor	יועץ	יועצת
+driver	נהג	נהגת
+designer	מעצב	מעצבת
+salesperson	איש מכירות	אשת מכירות	איש המכירות	אשת המכירות
+writer	כתב	כתבת	סופר	סופרת
+developer	מפתח	מפתחת
+farmer	חוואי	חוואית	חקלאי	חקלאית	איכר	איכרה
+guard	שומר	שומרת
+hairdresser	ספר	ספרית	מעצב שיער	מעצבת שיער	מעצב השיער	מעצבת השיער
+physician	רופא	רופאה
+supervisor	מפקח	מפקחת
+cleaner	מנקה	מנקה
+janitor	שרת	שרתית
+carpenter	נגר	נגרית
+librarian	ספרן	ספרנית
+accountant	רואה חשבון	רואת חשבון
+baker	אופה	אופה
+mover	מוביל	מובילה
+lawyer	עורך דין	עורכת דין
+teacher	מורה	מורה
+auditor	מבקר	מבקרת
+assistant	עוזר	עוזרת
+clerk	פקיד	פקידה
+laborer	פועל	פועלת	עובד	עובדת
+editor	עורך	עורכת
+CEO	מנכ"ל	מנכ"ל
+nurse	אח	אחות
+housekeeper	עקר בית	עקרת בית	עקר הבית	עקרת הבית
+chief	מפקד	מפקדת
+cook	טבח	טבחית
+cashier	קופאי	קופאית
+sheriff	שריף	שריף
+analyst	אנליסט	אנליסטית
+secretary	מזכיר	מזכירה
+construction worker	פועל בניין	פועלת בניין	פועל הבניין	פועלת הבניין	עובד בניין	עובדת בניין	עובד הבניין	עובדת הבניין
+mechanic	מכונאי	מכונאית
+manager	מנהל	מנהלת
+receptionist	פקיד קבלה	פקידת קבלה	פקיד הקבלה	פקידת הקבלה
+tailor	חייט	חייטת	תופר	תופרת
+attendant	מטפל	מטפלת

@@ -36,6 +36,26 @@ def merge_translations(file_names, target_file):
         f.write(str(translations_dict))
     return translations_dict, professions
 
+def get_annotations_dict(merged_annotations):
+    translations_dict = {}
+    professions = set()
+    with open(merged_annotations, 'r') as f:
+        lines = f.readlines()
+    for line in lines:
+        line = line.strip()
+        columns = line.split("\t")
+        english_profession = columns[0]
+        professions.add(english_profession)
+        if not english_profession in translations_dict:
+            translations_dict[english_profession] = {'Male': [], 'Female': []}
+        for i in range(1, len(columns)):
+            if columns[i] != "":
+                if i % 2 and columns[i]:
+                    translations_dict[english_profession]['Male'].append(columns[i])
+                else:
+                    translations_dict[english_profession]['Female'].append(columns[i])
+    return translations_dict, professions
+
 
 def get_num_of_tokens_per_profession(professions, translations_dict, tokenizer, target_file):
     tokens_per_profession = {}
@@ -158,8 +178,14 @@ def graphs_3_and_4(group1_num_of_tokens_map, group2_num_of_tokens_map, max_token
 
 
 if __name__ == '__main__':
-    he_translations, professions = merge_translations(hebrew_file_names, "../data/he_merged_translations.txt")
-    de_translations, professions = merge_translations(german_file_names, "../data/de_merged_translations.txt")
+
+    # this was in the case where we had all annotations and we wanted a sum of them
+    # he_translations, professions = merge_translations(hebrew_file_names, "../data/he_merged_translations.txt")
+    # de_translations, professions = merge_translations(german_file_names, "../data/de_merged_translations.txt")
+
+    # this is in case we have one merged annotation file with the majority of 2 annotators and we create dict from it
+    he_translations, professions = get_annotations_dict("../data/he_merged_translations_new.txt")
+    de_translations, professions = get_annotations_dict("../data/de_merged_translations_new.txt")
     print("tokens per profession he")
     print(get_num_of_tokens_per_profession(professions, he_translations, tokenizer_he, "../data/he_tokens_per_profession.txt"))
     print("tokens per profession de")

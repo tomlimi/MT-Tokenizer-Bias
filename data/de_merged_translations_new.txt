@@ -1,0 +1,40 @@
+counselor	Berater	Beraterin
+driver	Fahrer	Fahrerin
+designer	Designer	Designerin	Gestalter	Gestalterin
+salesperson	Verkäufer	Verkäuferin	Händler	Händlerin
+writer	Schriftsteller	Schriftstellerin	Autor	Autorin
+developer	Entwickler	Entwicklerin
+farmer	Bauer	Bäuerin	Landwirt	Landwirtin
+guard	Wächter	Wächterin
+hairdresser	Friseur	Friseurin	Frisör	Frisörin
+physician	Arzt	Ärztin	Mediziner	Medizinerin
+supervisor	Betreuer	Betreuerin	Vorgesetzter	Vorgesetzte
+cleaner	Putzmann	Putzfrau	Reinigungskraft	Reinigungskraft
+janitor	Hausmeister	Hausmeisterin
+carpenter	Schreiner	Schreinerin	Tischler	Tischlerin	Zimmerer	Zimmererin
+librarian	Bibliothekar	Bibliothekarin
+accountant	Buchhalter	Buchhalterin	Steuerberater	Steuerberaterin	Wirtschaftsprüfer	Wirtschaftsprüferin
+baker	Bäcker	Bäckerin
+mover	Umzugshelfer	Umzugshelferin
+lawyer	Anwalt	Anwältin	Rechtsanwalt	Rechtsanwältin	Jurist	Juristin
+teacher	Lehrer	Lehrerin
+auditor	Wirtschaftsprüfer	Wirtschaftsprüferin	Prüfer	Prüferin	Rechnungsprüfer	Rechnungsprüferin
+assistant	Assistent	Assistentin
+clerk	Angestellter	Angestellte	Sachbearbeiter	Sachbearbeiterin
+laborer	Arbeiter	Arbeiterin
+editor	Herausgeber	Herausgeberin	Redakteur	Redakteurin	Lektor	Lektorin
+CEO	Geschäftsführer	Geschäftsführerin	Vorstandsvorsitzender	Vorstandsvorsitzende
+nurse	Krankenpfleger	Krankenschwester	Pfleger	Pflegerin
+housekeeper	Haushälter	Haushälterin
+chief	Chef	Chefin	Leiter	Leiterin
+cook	Koch	Köchin
+cashier	Kassierer	Kassiererin
+sheriff	Sheriff	Sheriff
+analyst	Analyst	Analystin	Analytiker	Analytikerin
+secretary	Sekretär	Sekretärin
+construction worker	Bauarbeiter	Bauarbeiterin
+mechanic	Mechaniker	Mechanikerin	Monteur	Monteurin	Handwerker	Handwerkerin
+manager	Manager	Managerin	Geschäftsführer	Geschäftsführerin	Chef	Chefin
+receptionist	Rezeptionist	Rezeptionistin	Empfangsperson	Empfangsdame
+tailor	Schneider	Schneiderin
+attendant	Begleiter	Begleiterin
