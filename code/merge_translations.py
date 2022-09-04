@@ -174,6 +174,16 @@ def graphs_3_and_4(group1_num_of_tokens_map, group2_num_of_tokens_map, max_token
 
     plt.legend()
     plt.title(title)
+    if 'Hebrew' in title:
+        lang = 'he'
+    else:
+        lang = 'de'
+    if 'Gender' in title:
+        graph_num = '3'
+    else:
+        graph_num = '4'
+    plt.savefig(f'../graphs/graph_{graph_num}_{lang}.pdf', dpi=300)
+    
     plt.show()
 
 
