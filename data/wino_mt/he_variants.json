@@ -1,0 +1,268 @@
+{
+  "counselor-male": [
+    "יועץ"
+  ],
+  "counselor-female": [
+    "יועצת"
+  ],
+  "driver-male": [
+    "נהג"
+  ],
+  "driver-female": [
+    "נהגת"
+  ],
+  "designer-male": [
+    "מעצב"
+  ],
+  "designer-female": [
+    "מעצבת"
+  ],
+  "salesperson-male": [
+    "איש מכירות",
+    "איש המכירות"
+  ],
+  "salesperson-female": [
+    "אשת מכירות",
+    "אשת המכירות"
+  ],
+  "writer-male": [
+    "כתב",
+    "סופר"
+  ],
+  "writer-female": [
+    "כתבת",
+    "סופרת"
+  ],
+  "developer-male": [
+    "מפתח"
+  ],
+  "developer-female": [
+    "מפתחת"
+  ],
+  "farmer-male": [
+    "חוואי",
+    "חקלאי",
+    "איכר"
+  ],
+  "farmer-female": [
+    "חוואית",
+    "חקלאית",
+    "איכרה"
+  ],
+  "guard-male": [
+    "שומר"
+  ],
+  "guard-female": [
+    "שומרת"
+  ],
+  "hairdresser-male": [
+    "ספר",
+    "מעצב שיער",
+    "מעצב השיער"
+  ],
+  "hairdresser-female": [
+    "ספרית",
+    "מעצבת שיער",
+    "מעצבת השיער"
+  ],
+  "physician-male": [
+    "רופא"
+  ],
+  "physician-female": [
+    "רופאה"
+  ],
+  "supervisor-male": [
+    "מפקח"
+  ],
+  "supervisor-female": [
+    "מפקחת"
+  ],
+  "cleaner-male": [
+    "מנקה"
+  ],
+  "cleaner-female": [
+    "מנקה"
+  ],
+  "janitor-male": [
+    "שרת"
+  ],
+  "janitor-female": [
+    "שרתית"
+  ],
+  "carpenter-male": [
+    "נגר"
+  ],
+  "carpenter-female": [
+    "נגרית"
+  ],
+  "librarian-male": [
+    "ספרן"
+  ],
+  "librarian-female": [
+    "ספרנית"
+  ],
+  "accountant-male": [
+    "רואה חשבון"
+  ],
+  "accountant-female": [
+    "רואת חשבון"
+  ],
+  "baker-male": [
+    "אופה"
+  ],
+  "baker-female": [
+    "אופה"
+  ],
+  "mover-male": [
+    "מוביל"
+  ],
+  "mover-female": [
+    "מובילה"
+  ],
+  "lawyer-male": [
+    "עורך דין"
+  ],
+  "lawyer-female": [
+    "עורכת דין"
+  ],
+  "teacher-male": [
+    "מורה"
+  ],
+  "teacher-female": [
+    "מורה"
+  ],
+  "auditor-male": [
+    "מבקר"
+  ],
+  "auditor-female": [
+    "מבקרת"
+  ],
+  "assistant-male": [
+    "עוזר"
+  ],
+  "assistant-female": [
+    "עוזרת"
+  ],
+  "clerk-male": [
+    "פקיד"
+  ],
+  "clerk-female": [
+    "פקידה"
+  ],
+  "laborer-male": [
+    "פועל",
+    "עובד"
+  ],
+  "laborer-female": [
+    "פועלת",
+    "עובדת"
+  ],
+  "editor-male": [
+    "עורך"
+  ],
+  "editor-female": [
+    "עורכת"
+  ],
+  "CEO-male": [
+    "מנכ\"ל"
+  ],
+  "CEO-female": [
+    "מנכ\"לית"
+  ],
+  "nurse-male": [
+    "אח"
+  ],
+  "nurse-female": [
+    "אחות"
+  ],
+  "housekeeper-male": [
+    "עקר בית",
+    "עקר הבית"
+  ],
+  "housekeeper-female": [
+    "עקרת בית",
+    "עקרת הבית"
+  ],
+  "chief-male": [
+    "מפקד"
+  ],
+  "chief-female": [
+    "מפקדת"
+  ],
+  "cook-male": [
+    "טבח"
+  ],
+  "cook-female": [
+    "טבחית"
+  ],
+  "cashier-male": [
+    "קופאי"
+  ],
+  "cashier-female": [
+    "קופאית"
+  ],
+  "sheriff-male": [
+    "שריף"
+  ],
+  "sheriff-female": [
+    "שריף"
+  ],
+  "analyst-male": [
+    "אנליסט"
+  ],
+  "analyst-female": [
+    "אנליסטית"
+  ],
+  "secretary-male": [
+    "מזכיר"
+  ],
+  "secretary-female": [
+    "מזכירה"
+  ],
+  "construction worker-male": [
+    "פועל בניין",
+    "פועל הבניין",
+    "עובד בניין",
+    "עובד הבניין"
+  ],
+  "construction worker-female": [
+    "פועלת בניין",
+    "פועלת הבניין",
+    "עובדת בניין",
+    "עובדת הבניין"
+  ],
+  "mechanic-male": [
+    "מכונאי"
+  ],
+  "mechanic-female": [
+    "מכונאית"
+  ],
+  "manager-male": [
+    "מנהל"
+  ],
+  "manager-female": [
+    "מנהלת"
+  ],
+  "receptionist-male": [
+    "פקיד קבלה",
+    "פקיד הקבלה"
+  ],
+  "receptionist-female": [
+    "פקידת קבלה",
+    "פקידת הקבלה"
+  ],
+  "tailor-male": [
+    "חייט",
+    "תופר"
+  ],
+  "tailor-female": [
+    "חייטת",
+    "תופרת"
+  ],
+  "attendant-male": [
+    "מטפל"
+  ],
+  "attendant-female": [
+    "מטפלת"
+  ]
+}
