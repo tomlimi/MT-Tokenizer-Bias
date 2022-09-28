@@ -99,6 +99,11 @@ class ModelArguments:
         },
     )
 
+    freeze: bool = field(
+        default=False,
+        metadata={"help": "Whether to freeze model parameters (except embedding layer)"},
+    )
+
 
 @dataclass
 class DataTrainingArguments:
@@ -391,6 +396,17 @@ def main():
     
     if model.config.decoder_start_token_id is None:
         raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
+    
+    # Freeze the model weights except embedding layer
+    if model_args.freeze:
+        logger.info("Freezeing parameters (except embedding layers)")
+        for name, param in model.named_parameters():
+            # TODO: checked naming of token embedding layer `shared' works for OpusMT models
+            if name.find('shared') == -1:
+                param.requires_grad = False
+            else:
+                param.requires_grad = True
+            logger.info(f"name: {name}; size: {np.prod(param.size())}, requires gradient: {param.requires_grad}")
     
     prefix = data_args.source_prefix if data_args.source_prefix is not None else ""
     
