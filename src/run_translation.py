@@ -26,6 +26,7 @@ from typing import Optional
 
 import datasets
 import numpy as np
+import torch.nn
 from datasets import load_dataset
 
 import evaluate
@@ -45,11 +46,13 @@ from transformers import (
     Seq2SeqTrainingArguments,
     default_data_collator,
     set_seed,
+    EarlyStoppingCallback,
 )
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import check_min_version, send_example_telemetry
 from transformers.utils.versions import require_version
 
+from translation_utilities import PartiallyFrozenEmbeddings, PartiallyFrozenLinear, partially_freeze_embeddings, restore_model_structure
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 check_min_version("4.23.0.dev0")
@@ -60,6 +63,22 @@ logger = logging.getLogger(__name__)
 
 # A list of all multilingual tokenizer which require src_lang and tgt_lang attributes.
 MULTILINGUAL_TOKENIZERS = [MBartTokenizer, MBartTokenizerFast, MBart50Tokenizer, MBart50TokenizerFast, M2M100Tokenizer]
+
+# A tuple with profession names in English
+# TODO: move to constants
+PROFESSION_LIST = ('accountant', 'electrician', 'surgeon', 'ceo', 'instructor', 'secretary', 'farmer', 'student',
+                   'dietitian', 'veterinarian', 'machinist', 'pharmacist', 'child', 'resident', 'owner', 'baker',
+                   'homeowner', 'specialist', 'examiner', 'assistant', 'janitor', 'supervisor', 'advisor', 'carpenter',
+                   'editor', 'manager', 'victim', 'patient', 'analyst', 'broker', 'chef', 'teenager', 'cook', 'client',
+                   'someone', 'writer', 'onlooker', 'designer', 'therapist', 'attendant', 'driver', 'paramedic',
+                   'sheriff','construction worker', 'chemist', 'auditor', 'protester', 'mover', 'housekeeper',
+                   'buyer', 'clerk', 'cashier', 'firefighter', 'undergraduate', 'taxpayer', 'educator', 'counselor',
+                   'administrator', 'advisee', 'bartender', 'doctor', 'practitioner', 'guard', 'paralegal', 'hygienist',
+                   'technician', 'hairdresser', 'nurse', 'pedestrian', 'employee', 'psychologist', 'mechanic',
+                   'librarian', 'inspector', 'laborer', 'visitor', 'cleaner', 'salesperson', 'planner', 'physician',
+                   'chief', 'officer', 'passenger', 'scientist', 'appraiser', 'teacher', 'nutritionist', 'tailor',
+                   'plumber', 'witness', 'dispatcher', 'painter', 'developer', 'programmer', 'lawyer', 'engineer',
+                   'worker', 'investigator', 'customer', 'bystander', 'pathologist', 'architect', 'guest', 'receptionist')
 
 
 @dataclass
@@ -98,10 +117,22 @@ class ModelArguments:
             )
         },
     )
-
     freeze: bool = field(
         default=False,
-        metadata={"help": "Whether to freeze model parameters (except embedding layer)"},
+        metadata={"help": "Whether to freeze model parameters (except embedding layer)."},
+    )
+    freeze_embeddings: bool = field(
+        default=False,
+        metadata={'help': "Whether to partially freeze embedding layer (excapt embeddings of added tokens)."},
+    )
+    reset_all_embeddings: bool = field(
+        default=False,
+        metadata={"help": "Whether to reset all embeddings of the model."}
+    )
+    train_from_scratch: bool = field(
+        default=False,
+        metadata={
+            "help": "Whether to initialize the weight of the model with specified architecture."},
     )
 
 
@@ -230,6 +261,18 @@ class DataTrainingArguments:
                 " multilingual models like :doc:`mBART <../model_doc/mbart>` where the first generated token needs to"
                 " be the target language token.(Usually it is the target language token)"
             )
+        },
+    )
+    early_stopping: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": "Whether to apply early stopping with given patience"
+        }
+    )
+    with_profession_only: bool = field(
+        default=False,
+        metadata={
+            "help": "Whether to keep only sentences with profession names in the datasets."
         },
     )
     
@@ -376,15 +419,21 @@ def main():
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        model_args.model_name_or_path,
-        from_tf=bool(".ckpt" in model_args.model_name_or_path),
-        config=config,
-        cache_dir=model_args.cache_dir,
-        revision=model_args.model_revision,
-        use_auth_token=True if model_args.use_auth_token else None,
-    )
     
+    if model_args.train_from_scratch:
+        model = AutoModelForSeq2SeqLM.from_config(config)
+        
+    else:
+        model = AutoModelForSeq2SeqLM.from_pretrained(
+            model_args.model_name_or_path,
+            from_tf=bool(".ckpt" in model_args.model_name_or_path),
+            config=config,
+            cache_dir=model_args.cache_dir,
+            revision=model_args.model_revision,
+            use_auth_token=True if model_args.use_auth_token else None,
+        )
+        
+        
     model.resize_token_embeddings(len(tokenizer))
     
     # Set decoder_start_token_id
@@ -396,7 +445,13 @@ def main():
     
     if model.config.decoder_start_token_id is None:
         raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
-    
+        
+    # Resetting embedding layer.
+    if model_args.reset_all_embeddings:
+        logger.info("Resetting all embeddings.")
+        model.lm_head.reset_parameters()
+        # model.lm_head.weight[tokenizer.pad_token_id, :] *= 0.
+
     # Freeze the model weights except embedding layer
     if model_args.freeze:
         logger.info("Freezeing parameters (except embedding layers)")
@@ -407,7 +462,11 @@ def main():
             else:
                 param.requires_grad = True
             logger.info(f"name: {name}; size: {np.prod(param.size())}, requires gradient: {param.requires_grad}")
-    
+
+    if model_args.freeze_embeddings:
+        logger.info("Partially freezeing embeddings layer (except embeddings for added tokens)")
+        partially_freeze_embeddings(model, tokenizer.pad_token_id)
+        
     prefix = data_args.source_prefix if data_args.source_prefix is not None else ""
     
     # Preprocessing the datasets.
@@ -453,10 +512,17 @@ def main():
             "label_smoothing is enabled but the `prepare_decoder_input_ids_from_labels` method is not defined for"
             f"`{model.__class__.__name__}`. This will lead to loss being calculated twice and will take up more memory"
         )
+
+    if data_args.with_profession_only and source_lang == 'en':
+        logger.info("Keeping only sentences with profession in the datasets.")
     
     def preprocess_function(examples):
         inputs = [ex[source_lang] for ex in examples["translation"]]
         targets = [ex[target_lang] for ex in examples["translation"]]
+        # Keep only sentences with profession word in the target
+        if data_args.with_profession_only and source_lang == 'en':
+            inputs, targets = zip(*((input, target) for input, target in zip(inputs, targets)
+                                    if any((input.lower().find(prof)!=-1 for prof in PROFESSION_LIST))))
         inputs = [prefix + inp for inp in inputs]
         model_inputs = tokenizer(inputs, max_length=data_args.max_source_length, padding=padding, truncation=True)
         
@@ -568,6 +634,12 @@ def main():
         result = {k: round(v, 4) for k, v in result.items()}
         return result
     
+    # Apply early stopping
+    callbacks = []
+    if data_args.early_stopping is not None:
+        callbacks.append(EarlyStoppingCallback(early_stopping_patience=data_args.early_stopping))
+        training_args.load_best_model_at_end = True
+    
     # Initialize our Trainer
     trainer = Seq2SeqTrainer(
         model=model,
@@ -577,6 +649,7 @@ def main():
         tokenizer=tokenizer,
         data_collator=data_collator,
         compute_metrics=compute_metrics if training_args.predict_with_generate else None,
+        callbacks=callbacks,
     )
     
     # Training
@@ -587,6 +660,12 @@ def main():
         elif last_checkpoint is not None:
             checkpoint = last_checkpoint
         train_result = trainer.train(resume_from_checkpoint=checkpoint)
+
+        # Restore the model structure
+        if model_args.freeze_embeddings:
+            logger.info("Restoring default model structure")
+            restore_model_structure(model)
+            
         trainer.save_model()  # Saves the tokenizer too for easy upload
         
         metrics = train_result.metrics
