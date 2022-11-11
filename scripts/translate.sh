@@ -17,7 +17,7 @@ source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virturalenvs/bin/activat
 cd /lnet/work/people/limisiewicz/mt-tokenizer-bias/MT-Tokenizer-Bias || exit
 
 if [ "$TGT_LANG" == "he" ]; then
-  python src/translate_word_align.py --file tatoeba-test-v2021-08-07.eng-heb.txt --tgt_lang $TGT_LANG --src_first Tru--translator opus-mt
+  python src/translate_word_align.py --file tatoeba-test-v2021-08-07.eng-heb.txt --tgt_lang $TGT_LANG --src_first True --translator opus-mt
 elif [ "$TGT_LANG" == "de" ]; then
   python src/translate_word_align.py --file tatoeba-test-v2021-08-07.deu-eng.txt --tgt_lang $TGT_LANG  --translator opus-mt
 else
