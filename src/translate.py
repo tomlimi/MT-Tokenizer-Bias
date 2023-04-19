@@ -1,7 +1,7 @@
 from easynmt import EasyNMT
 model = EasyNMT('opus-mt')
 from tqdm import tqdm
-with open("../data/en.txt","r") as f:
+with open("../data/en.txt", "r") as f:
     lines = f.readlines()
     lines = [l.split("\t")[2] for l in lines]
 with open("../data/en-de","w+") as f_de, open("../data/en-he","w+") as f_he:

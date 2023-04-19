@@ -1,7 +1,6 @@
 import json
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import hmean
 from transformers import MarianTokenizer
 from collections import defaultdict
 
@@ -165,15 +164,15 @@ def graph_5(results_file,tokens_dict,lang, recall_precision_location):
 
 if __name__ == '__main__':
     
-    tokens_dict_he = create_tokens_dict("../data/wino_mt/he_variants.json",TRANSLATOR, SRC_LANG, "he")
-    tokens_dict_de = create_tokens_dict("../data/wino_mt/de_variants.json",TRANSLATOR, SRC_LANG, "de")
+    tokens_dict_he = create_tokens_dict("../data/wino_mt/he_variants.json", TRANSLATOR, SRC_LANG, "he")
+    tokens_dict_de = create_tokens_dict("../data/wino_mt/de_variants.json", TRANSLATOR, SRC_LANG, "de")
 
     # tokens_dict_he = load_old_tokens_dict("../data/he_tokens_per_profession.txt")
     # tokens_dict_de = load_old_tokens_dict("../data/de_tokens_per_profession.txt")
     
-    graph_5("../data/he_results.txt", tokens_dict_he,"Hebrew",RECALL)
-    graph_5("../data/de_results.txt", tokens_dict_de,"German",RECALL)
-    graph_5("../data/he_results.txt", tokens_dict_he,"Hebrew",PRECISION)
-    graph_5("../data/de_results.txt", tokens_dict_de,"German",PRECISION)
-    graph_5_delta_g("../data/he_results.txt", tokens_dict_he,"Hebrew")
-    graph_5_delta_g("../data/de_results.txt", tokens_dict_de,"German")
+    graph_5("../data/he_results.txt", tokens_dict_he, "Hebrew", RECALL)
+    graph_5("../data/de_results.txt", tokens_dict_de, "German", RECALL)
+    graph_5("../data/he_results.txt", tokens_dict_he, "Hebrew", PRECISION)
+    graph_5("../data/de_results.txt", tokens_dict_de, "German", PRECISION)
+    graph_5_delta_g("../data/he_results.txt", tokens_dict_he, "Hebrew")
+    graph_5_delta_g("../data/de_results.txt", tokens_dict_de, "German")

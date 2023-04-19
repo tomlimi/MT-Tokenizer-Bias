@@ -197,9 +197,11 @@ if __name__ == '__main__':
     he_translations, professions = get_annotations_dict("../data/he_merged_translations_new.txt")
     de_translations, professions = get_annotations_dict("../data/de_merged_translations_new.txt")
     print("tokens per profession he")
-    print(get_num_of_tokens_per_profession(professions, he_translations, tokenizer_he, "../data/he_tokens_per_profession.txt"))
+    print(get_num_of_tokens_per_profession(professions, he_translations, tokenizer_he,
+                                           "../data/he_tokens_per_profession.txt"))
     print("tokens per profession de")
-    print(get_num_of_tokens_per_profession(professions, de_translations, tokenizer_de, "../data/de_tokens_per_profession.txt"))
+    print(get_num_of_tokens_per_profession(professions, de_translations, tokenizer_de,
+                                           "../data/de_tokens_per_profession.txt"))
 
     print("tokens per gender he")
     he_male_average_tokens, he_female_average_tokens, he_male_num_of_tokens_map, he_female_num_of_tokens_map, he_max_tokens = \
@@ -213,21 +215,23 @@ if __name__ == '__main__':
 
     # stereotype
 
-    with open("../data/male_stereotype","r") as f:
+    with open("../data/male_stereotype", "r") as f:
         male_stereotype = f.readlines()
         male_stereotype = [i.strip() for i in male_stereotype]
-    with open("../data/female_stereotype","r") as f:
+    with open("../data/female_stereotype", "r") as f:
         female_stereotype = f.readlines()
         female_stereotype = [i.strip() for i in female_stereotype]
 
     print("tokens per stereotype he")
     he_stereotype_avg_tokens, he_anti_stereotype_avg_tokens, \
     he_stereotype_num_of_tokens_map, he_anti_stereotype_num_of_tokens_map, he_max_tokens = \
-        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, he_translations, tokenizer_he, "../data/he_tokens_per_stereotype.txt")
+        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, he_translations, tokenizer_he,
+                                         "../data/he_tokens_per_stereotype.txt")
     graphs_3_and_4(he_stereotype_num_of_tokens_map, he_anti_stereotype_num_of_tokens_map, he_max_tokens, "Hebrew num of tokens per stereotype", "stereotype", "Anti stereotype")
 
     print("tokens per stereotype de")
     de_stereotype_avg_tokens, de_anti_stereotype_avg_tokens, \
     de_stereotype_num_of_tokens_map, de_anti_stereotype_num_of_tokens_map, de_max_tokens = \
-        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, de_translations, tokenizer_de, "../data/de_tokens_per_stereotype.txt")
+        get_num_of_tokens_per_stereotype(male_stereotype, female_stereotype, de_translations, tokenizer_de,
+                                         "../data/de_tokens_per_stereotype.txt")
     graphs_3_and_4(de_stereotype_num_of_tokens_map, de_anti_stereotype_num_of_tokens_map, de_max_tokens, "German num of tokens per stereotype", "stereotype", "Anti stereotype")

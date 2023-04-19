@@ -14,9 +14,11 @@ fi
 TGT_LANG=$1
 DATA_NAME=$2
 KEEP_PROFESSIONS=$3
-
-source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virtualenv/bin/activate
-cd /lnet/work/people/limisiewicz/mt-tokenizer-bias/MT-Tokenizer-Bias || exit
+#workdir=/lnet/work/people/limisiewicz/mt-tokenizer-bias
+workdir=/cs/usr/matanel.oren/Desktop/bar
+#source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virtualenv/bin/activate
+source ${workdir}/MT-Tokenizer-Bias/venv/venv/bin/activate
+cd ${workdir}/MT-Tokenizer-Bias || exit
 
 if [ $KEEP_PROFESSIONS -eq 1 ]; then
   echo "Splitting professions; Target language: ${TGT_LANG} dataset: ${DATA_NAME}"
@@ -30,8 +32,8 @@ fi
 MODEL="Helsinki-NLP/opus-mt-en-${TGT_LANG}"
 
 
-echo "Model ${MODEL}; tokenizer ${TOKENIZER}"
-mkdir ${OUTPUT_DIR}
+echo "Model ${MODEL}; tokenizer ${TOKENIZER}; OUTPUT_DIR ${OUTPUT_DIR}"
+mkdir -p ${OUTPUT_DIR}
 
 if [ "$TGT_LANG" \< "en" ]; then
   DATA_CONFIG_NAME="${TGT_LANG}-en"
@@ -45,7 +47,7 @@ if [ "$TGT_LANG" = "he" ]; then
 else
      LR=3e-4
 fi
-#
+
 python src/run_translation.py --model_name_or_path $MODEL --tokenizer_name $TOKENIZER \
  --do_train --do_eval --do_predict --train_from_scratch True --max_source_length 512 \
  --dataset_name ${DATA_NAME} --source_lang en --target_lang ${TGT_LANG} --dataset_config_name ${DATA_CONFIG_NAME} \
