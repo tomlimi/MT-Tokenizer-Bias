@@ -42,9 +42,18 @@ where:
 ### Fine-tuning
 
 (For fine tuning we use our gender balance dataset, download it or follow the instruction below to create it)
-The model is fine-tuned on the set of sentences containing simple sentences
 
+The model is fine-tuned on the set of sentences containing simple sentences with profession names.
+To fine tune the model with the default parameters run:
 
+```bash
+source ../scripts/fine_tune.sh <TGTL> <KEEP_PROFESSIONS> <TRANSLATOR>
+```
+
+where
+<KEEP_PROFESSIONS> is the flag whether to use the model with the updated vocabulary (value: 1) or not (value: 0).
+
+<TRANSLATOR> is the name of the original translation model from huggingface, by default `opus-mt` or `mbart50`.
 
 
 =======
