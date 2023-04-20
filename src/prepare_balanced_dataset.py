@@ -38,8 +38,9 @@ if __name__ == "__main__":
         variants = json.load(var_json)
 
     words_fn = os.path.join(args.out_dir, f"words.en{tgt_lang}.json")
+    os.makedirs(os.path.dirname(words_fn), exist_ok=True)
     sentence_fn = os.path.join(args.out_dir, f"sentences.en{tgt_lang}.json")
-    
+    os.makedirs(os.path.dirname(sentence_fn), exist_ok=True)
     with open(words_fn, 'w') as w_out, open(sentence_fn, 'w') as s_out:
         for profession_gender, translations in variants.items():
             src_prof, gender = profession_gender.split('-')

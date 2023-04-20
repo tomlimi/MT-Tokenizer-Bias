@@ -13,9 +13,11 @@ fi
 
 TGT_LANG=$1
 DATA_NAME=$2
-
-source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virtualenv/bin/activate
-cd /lnet/work/people/limisiewicz/mt-tokenizer-bias/MT-Tokenizer-Bias || exit
+#workdir=/lnet/work/people/limisiewicz/mt-tokenizer-bias
+workdir=/cs/usr/matanel.oren/Desktop/bar
+#source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virtualenv/bin/activate
+source ${workdir}/MT-Tokenizer-Bias/venv/venv/bin/activate
+cd ${workdir}/MT-Tokenizer-Bias || exit
 # Meaning of acronyms:
 # ft: fine-tuning (only embeddings layer)
 # re: randomly intialized embeddings for added profession words
@@ -29,6 +31,16 @@ cd /lnet/work/people/limisiewicz/mt-tokenizer-bias/MT-Tokenizer-Bias || exit
 OUTPUT_DIR="models/model/opus-mt-en-${TGT_LANG}-${DATA_NAME}-ft_ae_wp_st_fe"
 mkdir ${OUTPUT_DIR}
 #
+echo "********"
+echo "python src/run_translation.py --model_name_or_path 'models/model/opus-mt-en-${TGT_LANG}-avg_emb' \
+ --tokenizer_name 'models/tokenizer/with_professions_opus-mt-en-${TGT_LANG}' --do_train --do_eval --max_source_length 512 \
+ --dataset_name ${DATA_NAME} --source_lang en --target_lang ${TGT_LANG} --dataset_config_name ${TGT_LANG}-en \
+ --output_dir ${OUTPUT_DIR} --per_device_train_batch_size=16 \
+ --per_device_eval_batch_size=16  --predict_with_generate \
+ --save_total_limit 3 --save_steps 20000 --num_train_epochs=3.0 --report_to 'tensorboard' --freeze --freeze_embeddings\
+ --evaluation_strategy 'steps' --eval_steps 20000 --learning_rate 5e-5 \
+ --with_profession_only True --reset_all_embeddings False --preprocessing_num_workers=4"
+echo "********"
 python src/run_translation.py --model_name_or_path "models/model/opus-mt-en-${TGT_LANG}-avg_emb" \
  --tokenizer_name "models/tokenizer/with_professions_opus-mt-en-${TGT_LANG}" --do_train --do_eval --max_source_length 512 \
  --dataset_name ${DATA_NAME} --source_lang en --target_lang ${TGT_LANG} --dataset_config_name ${TGT_LANG}-en \
