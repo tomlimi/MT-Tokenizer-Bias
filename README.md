@@ -7,6 +7,10 @@ We analyze and mitigate gender bias in MT tokenizers.
 
 2. ...
 
+## Statistical Analysis
+
+...
+
 ## Interventions
 
 The following section describes how to extend the model's vocabulary to prevent from
@@ -22,7 +26,7 @@ for the added words.
 The two steps are performed by the following command:
 
 ```bash
-python src/update_vocabulary.py --src_lang <SRCL> --tgt_lang <TGTL> --translator <TRANS> --variants_dir <VARDIR> --average_embeddings --tokenizer_dir <TOKDIR> --model_dir <MODDIR>
+python update_vocabulary.py --src_lang <SRCL> --tgt_lang <TGTL> --translator <TRANS> --variants_dir <VARDIR> --average_embeddings --tokenizer_dir <TOKDIR> --model_dir <MODDIR>
 ```
 
 where:
@@ -36,3 +40,27 @@ where:
 `tokenizer_dir` and `model_dir` are the directories where the tokenizer and the model are stored, respectively.
 
 ### Fine-tuning
+
+(For fine tuning we use our gender balance dataset, download it or follow the instruction below to create it)
+The model is fine-tuned on the set of sentences containing simple sentences
+
+
+
+
+=======
+
+## Gender balanced dataset creation
+
+To create the dataset run the command:
+
+```bash
+python prepare_balanced_dataset.py --src_lang <SRCL> --tgt_lang <TGTL> --variants_dir <VARDIR> --out_dir <OUTDIR>
+```
+
+where:
+
+`variants_dir` is the directory where the human translated professions are stored. Specifically, it should contain a file `<TGTL>_variants.json`.
+
+`out_dir` is the directory where the balanced dataset will be stored.
+
+The data is saved in the new-line seperated list of jason strings (jsonl format).
