@@ -14,6 +14,7 @@ fi
 TGT_LANG=$1
 DATA_NAME=$2
 KEEP_PROFESSIONS=$3
+workdir=$4
 #workdir=/lnet/work/people/limisiewicz/mt-tokenizer-bias
 workdir=/cs/usr/matanel.oren/Desktop/bar
 #source /lnet/work/people/limisiewicz/mt-tokenizer-bias/.virtualenv/bin/activate

@@ -56,6 +56,10 @@ where
 <TRANSLATOR> is the name of the original translation model from huggingface, by default `opus-mt` or `mbart50`.
 
 
+### Evalaute the model
+
+TODO describe the usage of `scripts/eval_mt_gender.sh`
+
 =======
 
 ## Gender balanced dataset creation

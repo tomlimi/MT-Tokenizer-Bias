@@ -55,21 +55,30 @@ if __name__ == '__main__':
     parser.add_argument('--tgt_lang', type=str, required=True)
     parser.add_argument('--method', type=str, required=True)
     parser.add_argument('--translator', type=str, required=True)
+    
+    parser.add_argument('--model_dir', type=str, default='../models/model/', required=False)
+    parser.add_argument('--tokenizer_dir', type=str, default='../models/tokenizer/', required=False)
+    parser.add_argument('--output_dir', type=str, default='../results/', required=False)
+    
     args = parser.parse_args()
     src_lang = args.src_lang
     tgt_lang = args.tgt_lang
     method = args.method
     translator = args.translator
     
-    model = MarianMTModel.from_pretrained(f"../models/model/{translator}-{src_lang}-{tgt_lang}-{method}/")
+    model_dir = args.model_dir
+    tokenizer_dir = args.tokenizer_dir
+    output_dir = args.output_dir
+    
+    model = MarianMTModel.from_pretrained(os.path.join(model_dir,f"{translator}-{src_lang}-{tgt_lang}-{method}"))
     
     # Load special tokenizer for method starting with averaged additional embeddings
-    if method.find('_ae') != -1 or method.find('_re') != -1:
-        tokenizer = MarianTokenizer.from_pretrained(f"../models/tokenizer/with_professions_{translator}-{src_lang}-{tgt_lang}/")
+    if method.find('-ae') != -1 or method.find('-re') != -1:
+        tokenizer = MarianTokenizer.from_pretrained(os.path.join(tokenizer_dir,f"with_professions_{translator}-{src_lang}-{tgt_lang}/"))
     elif translator == 'opus-mt' or (translator == 'new-opus-mt' and method.endswith('split-professions')):
         tokenizer = MarianTokenizer.from_pretrained(f"Helsinki-NLP/opus-mt-en-{tgt_lang}")
     elif translator == 'new-opus-mt' and method.endswith('keep-professions'):
-        tokenizer = MarianTokenizer.from_pretrained(f"../models/tokenizer/with_professions_opus-mt-{src_lang}-{tgt_lang}/")
+        tokenizer = MarianTokenizer.from_pretrained(os.path.join(tokenizer_dir,f"with_professions_opus-mt-{src_lang}-{tgt_lang}/"))
     else:
         raise ValueError
 
@@ -77,9 +86,9 @@ if __name__ == '__main__':
         lines = f.readlines()
         lines = [l.split("\t")[2] for l in lines]
         
-    os.makedirs(f"../data/{translator}-{method}", exist_ok=True)
-    with open(f"../data/{translator}-{method}/{src_lang}-{tgt_lang}.txt","w+") as f_out, \
-         open(f"../data/{translator}-{method}/{tgt_lang}_num_sentences_with_added_tokens.txt","w") as f_out2:
+    os.makedirs(os.path.join(output_dir,f"{translator}-{method}"), exist_ok=True)
+    with open(os.path.join(output_dir,f"{translator}-{method}/{src_lang}-{tgt_lang}.txt"),"w+") as f_out, \
+         open(os.path.join(output_dir,f"{translator}-{method}/{tgt_lang}_num_sentences_with_added_tokens.txt"),"w") as f_out2:
         translated, n_sents_with_added_tokens = translate_sentences(lines, model, tokenizer)
         for orginal_sent, translated_sent in zip(lines, translated):
             f_out.write(orginal_sent+" ||| "+translated_sent+"\n")

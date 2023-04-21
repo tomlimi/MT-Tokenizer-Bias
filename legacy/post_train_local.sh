@@ -43,15 +43,15 @@ fi
 #OUTPUT_DIR_WORDS="${OUTPUT_DIR_WORDS}-const_lr_"
 OUTPUT_DIR_SENTS="${OUTPUT_DIR_SENTS}-freeze_embeddings"
 # mkdir ${OUTPUT_DIR_WORDS}
-#
-#python src/run_translation.py --model_name_or_path  $MODEL \
-# --tokenizer_name $TOKENIZER --do_train  --max_source_length 512 \
-# --source_lang en --target_lang ${TGT_LANG} --train_file $WORDFILE_NAME \
-# --output_dir ${OUTPUT_DIR_WORDS} --per_device_train_batch_size=1 \
-# --predict_with_generate \
-# --save_total_limit 3 --save_steps 2000 --num_train_epochs=3.0 --report_to "tensorboard" --freeze \
-# --learning_rate 5e-5 --lr_scheduler_type constant \
-# --with_profession_only False --preprocessing_num_workers=4
+
+python src/run_translation.py --model_name_or_path  $MODEL \
+ --tokenizer_name $TOKENIZER --do_train  --max_source_length 512 \
+ --source_lang en --target_lang ${TGT_LANG} --train_file $WORDFILE_NAME \
+ --output_dir ${OUTPUT_DIR_WORDS} --per_device_train_batch_size=1 \
+ --predict_with_generate \
+ --save_total_limit 3 --save_steps 2000 --num_train_epochs=3.0 --report_to "tensorboard" --freeze \
+ --learning_rate 5e-5 --lr_scheduler_type constant \
+ --with_profession_only False --preprocessing_num_workers=4
 
 
 
