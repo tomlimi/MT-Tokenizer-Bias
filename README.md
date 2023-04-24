@@ -60,7 +60,20 @@ where
 
 TODO describe the usage of `scripts/eval_mt_gender.sh`
 
-=======
+Run the following command to evaluate the model:
+
+```bash
+source scripts/eval_mt_gender.sh <TGTL> <TRANSLATOR> <METHOD> <WINO_MTDIR>
+```
+
+wehere 
+<METHOD> is  the method of fidning representation for added words. Use '' for the model without added words and 're' for the
+model with added words with randomly initialized embeddings.
+
+<WINO_MTDIR> is the directory where the [WinoMT repo](https://github.com/gabrielStanovsky/mt_gender) is cloned. Create a virtual environment accoreding to WinoMT
+instructions and save it in the directorty `<WINO_MTDIR>/.virtualenv`.
+
+
 
 ## Gender balanced dataset creation
 

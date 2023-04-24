@@ -14,8 +14,9 @@ fi
 TGT_LANG=$1
 TRANSLATOR=$2
 METHOD=$3
+WINOMT_DIR=$4
+# WINOMT_DIR="../../mt_gender"
 FT_DATASET="variants-sents"
-WINOMT_DIR="../../mt_gender"
 
 TEST_DATASET="opus100"
 EXPERIMENT_NAME="${TRANSLATOR}-${FT_DATASET}-${METHOD}"
