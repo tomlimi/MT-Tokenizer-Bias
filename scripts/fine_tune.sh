@@ -24,8 +24,8 @@ else
     MODEL="Helsinki-NLP/${TRANSLATOR}-en-${TGT_LANG}"
     TOKENIZER="Helsinki-NLP/${TRANSLATOR}-en-${TGT_LANG}"
   else
-    MODEL="facebook/mbart-large-50"
-    TOKENIZER="facebook/mbart-large-50"
+    MODEL="facebook/mbart-large-50-many-to-many-mmt"
+    TOKENIZER="facebook/mbart-large-50-many-to-many-mmt"
   fi
 fi
 
