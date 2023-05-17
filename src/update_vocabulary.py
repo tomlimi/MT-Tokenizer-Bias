@@ -83,7 +83,7 @@ if __name__ == "__main__":
         tokenizer_org = MarianTokenizer.from_pretrained(model_name)
         model_org = MarianMTModel.from_pretrained(model_name)
     elif args.translator == "mbart50":
-        model_name = f"facebook/mbart-large-50"
+        model_name = f"facebook/mbart-large-50-many-to-many-mmt"
         tokenizer_org = MBart50Tokenizer.from_pretrained(model_name, src_lang=mbert50_lang_map[src_lang],
                                                          tgt_lang=mbert50_lang_map[tgt_lang])
         

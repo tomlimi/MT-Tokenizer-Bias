@@ -1,10 +1,10 @@
 from tqdm import tqdm
-from transformers import MarianMTModel, MarianModel, MarianTokenizer
+from transformers import MarianMTModel, MarianModel, MarianTokenizer, MBartForConditionalGeneration, MBart50TokenizerFast
 import numpy as np
 import torch
 import os
 import argparse
-
+LANGUAGE_CODES_MAP = {"en":"en_XX", "es":"es_XX","he":"he_IL","de":"de_DE"}
 def translate_batch(batch_sentences, model, tokenizer, beam_size = 5, **kwargs):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.to(device)
@@ -15,7 +15,9 @@ def translate_batch(batch_sentences, model, tokenizer, beam_size = 5, **kwargs):
         inputs[key] = inputs[key].to(device)
     
     with torch.no_grad():
-        translated = model.generate(**inputs, num_beams=beam_size, **kwargs)
+        # generated_tokens = model.generate(**encoded_en,
+        #                                   forced_bos_token_id=tokenizer.lang_code_to_id[LANGUAGE_CODES_MAP["he"]])
+        translated = model.generate(**inputs, num_beams=beam_size,forced_bos_token_id=tokenizer.lang_code_to_id[tokenizer.tgt_lang], **kwargs)
         output = [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
         n_sents_with_added_tokens = sum([any(t.cpu().data.numpy() >= tokenizer.vocab_size) for t in translated])
     return output, n_sents_with_added_tokens
@@ -69,16 +71,37 @@ if __name__ == '__main__':
     model_dir = args.model_dir
     tokenizer_dir = args.tokenizer_dir
     output_dir = args.output_dir
-    
-    model = MarianMTModel.from_pretrained(os.path.join(model_dir,f"{translator}-{src_lang}-{tgt_lang}-{method}"))
+
+    if method=="-":
+        if translator == 'opus-mt':
+            model = MarianMTModel.from_pretrained(f"Helsinki-NLP/{translator}-en-{tgt_lang}")
+
+        elif translator == 'mbart50':
+            model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+
+        else:
+            raise ValueError
+    else:
+        if translator == 'opus-mt':
+            model = MarianMTModel.from_pretrained(os.path.join(model_dir,f"{translator}-{src_lang}-{tgt_lang}-{method}"))
+        elif translator == 'mbart50':
+            model = MBartForConditionalGeneration.from_pretrained(os.path.join(model_dir,f"{translator}-{src_lang}-{tgt_lang}-{method}"))
+        else:
+            raise ValueError
     
     # Load special tokenizer for method starting with averaged additional embeddings
     if method.find('-ae') != -1 or method.find('-re') != -1:
-        tokenizer = MarianTokenizer.from_pretrained(os.path.join(tokenizer_dir,f"with_professions_{translator}-{src_lang}-{tgt_lang}/"))
+        if translator == 'opus-mt':
+            tokenizer = MarianTokenizer.from_pretrained(os.path.join(tokenizer_dir,f"with_professions_{translator}-{src_lang}-{tgt_lang}/"))
+        elif translator == "mbart50":
+            tokenizer = MBart50TokenizerFast.from_pretrained(os.path.join(tokenizer_dir, f"with_professions_{translator}-{src_lang}-{tgt_lang}/"))
     elif translator == 'opus-mt' or (translator == 'new-opus-mt' and method.endswith('split-professions')):
         tokenizer = MarianTokenizer.from_pretrained(f"Helsinki-NLP/opus-mt-en-{tgt_lang}")
     elif translator == 'new-opus-mt' and method.endswith('keep-professions'):
         tokenizer = MarianTokenizer.from_pretrained(os.path.join(tokenizer_dir,f"with_professions_opus-mt-{src_lang}-{tgt_lang}/"))
+    elif translator == "mbart50":
+        tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50", src_lang=LANGUAGE_CODES_MAP[src_lang], tgt_lang=LANGUAGE_CODES_MAP[tgt_lang])
+
     else:
         raise ValueError
 
@@ -87,6 +110,8 @@ if __name__ == '__main__':
         lines = [l.split("\t")[2] for l in lines]
         
     os.makedirs(os.path.join(output_dir,f"{translator}-{method}"), exist_ok=True)
+    print("path*******")
+    print(os.path.join(output_dir,f"{translator}-{method}/{src_lang}-{tgt_lang}.txt"))
     with open(os.path.join(output_dir,f"{translator}-{method}/{src_lang}-{tgt_lang}.txt"),"w+") as f_out, \
          open(os.path.join(output_dir,f"{translator}-{method}/{tgt_lang}_num_sentences_with_added_tokens.txt"),"w") as f_out2:
         translated, n_sents_with_added_tokens = translate_sentences(lines, model, tokenizer)
